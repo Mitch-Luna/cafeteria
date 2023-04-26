@@ -1,9 +1,9 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ClienteProducto } from "./producto.entity";
+import { ClienteProducto } from "./producto-image.entity";
 
 @Entity()
 export class Venta {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column({ type: 'text' })
@@ -21,8 +21,8 @@ export class Venta {
     @Column({ type: 'text' })
     fecha: string;
     
-    @OneToMany(() => ClienteProducto, (clienProducto) => clienProducto.nombreProducto,{
+    @OneToMany(() => ClienteProducto, (clienProducto) => clienProducto.venta,{
         cascade: true
     })
-    cliente: ClienteProducto[]
+    images?: ClienteProducto[]
 }

@@ -1,39 +1,55 @@
 import { Injectable } from '@nestjs/common';
 import { CreateVentaDto } from './dto/create-venta.dto';
-import { UpdateVentaDto } from './dto/update-venta.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Venta } from './entities/venta.entity';
 import { Repository } from 'typeorm';
-import { ClienteProducto } from './entities/producto.entity';
+import { ClienteProducto } from './entities/producto-image.entity';
+import { url } from 'inspector';
 
 @Injectable()
 export class VentasService {
   constructor(
     @InjectRepository(Venta)
-    private readonly VentaRepository: Repository<Venta>,
+    private readonly ventaRepository: Repository<Venta>,
 
     @InjectRepository(ClienteProducto)
     private readonly clienteProductiRepository: Repository<ClienteProducto>,
   ) {}
-  create(createVentaDto: CreateVentaDto) {
-    return 'This action adds a new venta';
+
+  async create(ventaDto: CreateVentaDto){
+    const { images = [], ...detalleVenta } = ventaDto;
+    const venta = await this.ventaRepository.create({
+      ...detalleVenta,
+      images : images.map((image) => this.clienteProductiRepository.create({url: image}))
+    })
+    await this.ventaRepository.save(venta);
+    return venta;
   }
+
 
   findAll() {
     return this.clienteProductiRepository.find({ relations: {
-      cliente: true,
+      venta: true,
   },});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} venta`;
+ findOne(id: string) {
+    return this.ventaRepository.findOneBy({ id });
   }
 
-  update(id: number, updateVentaDto: UpdateVentaDto) {
-    return `This action updates a #${id} venta`;
+  async update(id: string, cambios: CreateVentaDto){
+    const venta = await this.ventaRepository.preload({
+      id: id, 
+      ...cambios,
+      images:[],
+    });
+    await this.ventaRepository.save(venta);
+    return venta;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} venta`;
+  async remove(id: string) {
+    const venta = await this.findOne(id);
+    await this.ventaRepository.remove(venta);
+    return 'Venta eliminado satisfactoriamente';
   }
 }

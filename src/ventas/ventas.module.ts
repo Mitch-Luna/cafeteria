@@ -3,7 +3,7 @@ import { VentasService } from './ventas.service';
 import { VentasController } from './ventas.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Venta } from './entities/venta.entity';
-import { ClienteProducto } from './entities/producto.entity';
+import { ClienteProducto } from './entities/producto-image.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Venta,ClienteProducto])],
