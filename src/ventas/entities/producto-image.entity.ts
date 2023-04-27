@@ -10,6 +10,8 @@ export class ClienteProducto{
     @Column()
     url: string;
 
-    @ManyToOne(() => Venta, (venta) => venta.images)
+    @ManyToOne(() => Venta, (venta) => venta.images,{
+        onDelete: 'CASCADE',onUpdate:'CASCADE'
+    })
     venta: Venta 
 }
