@@ -34,7 +34,7 @@ export class VentasService {
   }
 
  findOne(id: string) {
-    return this.ventaRepository.findOneBy({ id });
+    return this.ventaRepository.findOneBy({ id});
   }
 
   async update(id: string, cambios: CreateVentaDto){

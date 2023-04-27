@@ -11,5 +11,5 @@ export class ClienteProducto{
     url: string;
 
     @ManyToOne(() => Venta, (venta) => venta.images)
-    venta?: Venta []
+    venta?: Venta 
 }
